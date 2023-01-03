@@ -1,5 +1,7 @@
 package com.tsolas.technico.model;
 
+import com.tsolas.technico.enums.RepairStatus;
+import com.tsolas.technico.enums.RepairType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

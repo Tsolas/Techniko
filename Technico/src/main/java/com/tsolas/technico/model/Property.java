@@ -1,5 +1,6 @@
 package com.tsolas.technico.model;
 
+import com.tsolas.technico.enums.PropertyType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
