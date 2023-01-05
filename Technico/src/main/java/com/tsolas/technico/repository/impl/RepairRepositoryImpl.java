@@ -10,7 +10,6 @@ import jakarta.persistence.PersistenceContext;
 import java.io.IOError;
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Properties;
 import org.apache.logging.log4j.LogManager;
@@ -39,7 +38,7 @@ public class RepairRepositoryImpl extends RepositoryImpl<Repair> implements Repa
   }
 
   @Override
-  public List<Repair> search(LocalDate submissionDate) {
+  public List<Repair> search(String submissionDate) {
     return entityManager.createQuery("select x from repair x where x.submissionDate =: submissionDate ", Repair.class)
             .setParameter("submissionDate", submissionDate).getResultList();
   }
@@ -88,7 +87,7 @@ public class RepairRepositoryImpl extends RepositoryImpl<Repair> implements Repa
   }
 
   @Override
-  public void updateSubmissionDate(int id, LocalDate submissionDate) {
+  public void updateSubmissionDate(int id, String submissionDate) {
     Repair repair = entityManager.find(Repair.class, id);
     repair.setSubmissionDate(submissionDate);
     try {
@@ -116,13 +115,13 @@ public class RepairRepositoryImpl extends RepositoryImpl<Repair> implements Repa
   }
 
   @Override
-  public void updateStartDate(int id, LocalDate startDate) {
+  public void updateStartDate(int id, String startDate) {
     Repair repair = entityManager.find(Repair.class, id);
     repair.setStartDate(startDate);
   }
 
   @Override
-  public void updateEndDate(int id, LocalDate endDate) {
+  public void updateEndDate(int id, String endDate) {
     Repair repair = entityManager.find(Repair.class, id);
     repair.setEndDate(endDate);
     try {
@@ -178,7 +177,7 @@ public class RepairRepositoryImpl extends RepositoryImpl<Repair> implements Repa
   }
 
   @Override
-  public void updateActualStartDate(int id, LocalDate actualStartDate) {
+  public void updateActualStartDate(int id, String actualStartDate) {
     Repair repair = entityManager.find(Repair.class, id);
     repair.setActualStartDate(actualStartDate);
     try {
@@ -192,7 +191,7 @@ public class RepairRepositoryImpl extends RepositoryImpl<Repair> implements Repa
   }
 
   @Override
-  public void updateActualEndDate(int id, LocalDate actualEndDate) {
+  public void updateActualEndDate(int id, String actualEndDate) {
     Repair repair = entityManager.find(Repair.class, id);
     repair.setActualEndDate(actualEndDate);
     try {

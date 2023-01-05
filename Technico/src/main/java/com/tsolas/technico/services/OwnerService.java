@@ -3,6 +3,8 @@ package com.tsolas.technico.services;
 import com.tsolas.technico.dto.PropertyDto;
 import com.tsolas.technico.dto.PropertyOwnerDto;
 import com.tsolas.technico.dto.RepairDto;
+import com.tsolas.technico.dto.RestApiResult;
+import com.tsolas.technico.exceptions.PropertyExceptions;
 import com.tsolas.technico.model.Property;
 import com.tsolas.technico.model.PropertyOwner;
 import com.tsolas.technico.model.Repair;
@@ -64,9 +66,9 @@ public interface OwnerService {
    * requirements
    *
    * @param property
-   * @throws PropertyException
+   * @throws com.tsolas.technico.exceptions.PropertyExceptions
    */
-  void isValidProperty(Property property) throws PropertyException;
+  void isValidProperty(Property property) throws PropertyExceptions;
 
   /**
    * This method changes acceptance status of a repair to true
