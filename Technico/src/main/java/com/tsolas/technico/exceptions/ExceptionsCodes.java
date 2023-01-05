@@ -1,6 +1,6 @@
 package com.tsolas.technico.exceptions;
 
-public class ExceptionCodes {
+public class ExceptionsCodes {
 
   public final static String PROPERTY_E9_NOT_VALID = "The Property's E9 is not valid";
   public final static String MISSING_PROPERTY_ADDRESS = "The Property's address is missing";
