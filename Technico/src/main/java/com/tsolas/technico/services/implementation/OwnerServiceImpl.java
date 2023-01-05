@@ -4,8 +4,10 @@ import com.tsolas.technico.dto.PropertyDto;
 import com.tsolas.technico.dto.PropertyOwnerDto;
 import com.tsolas.technico.dto.RepairDto;
 import com.tsolas.technico.dto.RestApiResult;
+import com.tsolas.technico.enums.PropertyType;
 import com.tsolas.technico.enums.RepairStatus;
 import com.tsolas.technico.enums.RepairType;
+import com.tsolas.technico.exceptions.ExceptionsCodes;
 import com.tsolas.technico.exceptions.PropertyException;
 import com.tsolas.technico.model.Property;
 import com.tsolas.technico.model.PropertyOwner;
@@ -174,7 +176,7 @@ public class OwnerServiceImpl implements OwnerService {
     if ((property.getPropertyType() != PropertyType.APARTMENT_BUILDING)
             && (property.getPropertyType() != PropertyType.DETACHED_HOUSE)
             && (property.getPropertyType() != PropertyType.MAISONETTE)) {
-      throw new PropertyException(ExceptionCodes.PROPERTY_TYPE_NOT_VALID);
+      throw new PropertyException(ExceptionsCodes.PROPERTY_TYPE_NOT_VALID);
     }
   }
 
@@ -202,7 +204,7 @@ public class OwnerServiceImpl implements OwnerService {
   @Override
   public RestApiResult<PropertyOwnerDto> getOwnerByVat(int vat) {
     PropertyOwnerDto ownerDto = new PropertyOwnerDto(propertyOwnerRepository.findByVat(vat));
-    return new RestApiResult<PropertyOwnerDto>(ownerDto, 0, "successful");
+    return new RestApiResult<>(ownerDto, 0, "successful");
   }
 
   @Override
@@ -220,7 +222,7 @@ public class OwnerServiceImpl implements OwnerService {
   @Override
   public RestApiResult<RepairDto> getRepair(int repairId) {
     RepairDto repairDto = new RepairDto(repairRepository.findById(repairId));
-    return new RestApiResult<RepairDto>(repairDto, 0, "successful");
+    return new RestApiResult<>(repairDto, 0, "successful");
   }
 
   @Override
@@ -309,12 +311,8 @@ public class OwnerServiceImpl implements OwnerService {
       entityManager.merge(existingRepair);
       entityManager.getTransaction().commit();
       return new RestApiResult<>(repairDto, 0, "successful");
-
     } catch (Exception e) {
       return new RestApiResult<>(repairDto, 0, "successful");
-
     }
-
   }
-
 }

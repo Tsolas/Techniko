@@ -38,4 +38,8 @@ public interface RepairRepository extends Repository<Repair> {
   void updateActualEndDate(int id, String actualEndDate);
 
   List<Repair> readAll();
+
+  Repair findById(int id);
+
+  boolean deleteRepair(int id);
 }

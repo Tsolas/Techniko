@@ -7,6 +7,7 @@ import com.tsolas.technico.model.Repair;
 import com.tsolas.technico.repository.RepairRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import java.io.IOError;
 import java.io.IOException;
 import java.io.InputStream;
@@ -227,4 +228,20 @@ public class RepairRepositoryImpl extends RepositoryImpl<Repair> implements Repa
     return results;
   }
 
+  @Override
+  @Transactional
+  public Repair findById(int id) {
+    Repair repair = entityManager.find(Repair.class, id);
+    return repair;
+  }
+
+  @Override
+  public boolean deleteRepair(int id) {
+    Repair repair = entityManager.find(Repair.class, id);
+    if (repair == null) {
+      return false;
+    }
+    entityManager.remove(repair);
+    return true;
+  }
 }

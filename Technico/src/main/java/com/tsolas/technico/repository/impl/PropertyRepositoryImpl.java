@@ -144,4 +144,21 @@ public class PropertyRepositoryImpl extends RepositoryImpl<Property> implements 
             .getResultList();
     return results;
   }
+
+  @Override
+  public boolean deleteProperty(int id) {
+    Property property = entityManager.find(Property.class, id);
+    if (property == null) {
+      return false;
+    }
+    entityManager.remove(property);
+    return true;
+  }
+
+  @Override
+  @Transactional
+  public Property findById(int id) {
+    Property property = entityManager.find(Property.class, id);
+    return property;
+  }
 }

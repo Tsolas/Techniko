@@ -24,4 +24,10 @@ public interface PropertyOwnerRepository extends Repository<PropertyOwner> {
   void createPropertyOwner(PropertyOwner propertyOwner);
 
   PropertyOwner findById(int id);
+
+  PropertyOwner findByVat(int vat);
+
+  PropertyOwner findByEmail(String email);
+
+  boolean deleteOwner(int id);
 }

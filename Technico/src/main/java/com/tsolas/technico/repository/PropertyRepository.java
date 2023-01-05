@@ -23,4 +23,8 @@ public interface PropertyRepository extends Repository<Property> {
   public void updateOwnerId(int propertyId, int propertyOwnerId);
 
   List<Property> readAll();
+
+  boolean deleteProperty(int id);
+
+  Property findById(int id);
 }

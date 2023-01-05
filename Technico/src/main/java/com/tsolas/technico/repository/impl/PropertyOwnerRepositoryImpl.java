@@ -5,6 +5,7 @@ import com.tsolas.technico.model.PropertyOwner;
 import com.tsolas.technico.repository.PropertyOwnerRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import java.io.IOError;
 import java.io.IOException;
@@ -126,4 +127,30 @@ public class PropertyOwnerRepositoryImpl extends RepositoryImpl<PropertyOwner> i
     PropertyOwner propertyOwner = entityManager.find(PropertyOwner.class, id);
     return propertyOwner;
   }
+
+  @Override
+  @Transactional
+  public PropertyOwner findByVat(int vat) {
+    TypedQuery<PropertyOwner> query = entityManager.createQuery("SELECT p from propertyowner p where p.vat =:vat", PropertyOwner.class);
+    query.setParameter("vat", vat);
+    return query.getSingleResult();
+  }
+
+  @Override
+  public PropertyOwner findByEmail(String email) {
+    TypedQuery<PropertyOwner> query = entityManager.createQuery("SELECT p FROM propertyowner p WHERE p.email = :email", PropertyOwner.class);
+    query.setParameter("email", email);
+    return query.getSingleResult();
+  }
+
+  @Override
+  public boolean deleteOwner(int id) {
+    PropertyOwner propertyOwner = entityManager.find(PropertyOwner.class, id);
+    if (propertyOwner == null) {
+      return false;
+    }
+    entityManager.remove(propertyOwner);
+    return true;
+  }
+
 }
