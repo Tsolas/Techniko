@@ -1,7 +1,6 @@
 package com.tsolas.technico.services;
 
 import com.tsolas.technico.model.Repair;
-import java.time.LocalDate;
 
 public interface AdminService {
 
@@ -25,7 +24,7 @@ public interface AdminService {
    * @param startDate
    * @param endDate
    */
-  void proposeDates(Repair repair, LocalDate startDate, LocalDate endDate);
+  void proposeDates(Repair repair, String startDate, String endDate);
 
   /**
    * This method displays a list of the final start and end dates of the repairs

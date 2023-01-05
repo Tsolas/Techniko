@@ -1,12 +1,11 @@
 package com.tsolas.technico.services;
 
-import com.tsolas.technico.model.PersistentClass;
 import com.tsolas.technico.model.Property;
 import com.tsolas.technico.model.PropertyOwner;
 import com.tsolas.technico.model.Repair;
 import java.util.List;
 
-public interface IoServices<T extends PersistentClass> {
+public interface IoServices {
 
   /**
    * This method saves the property owners table in to a csv file
@@ -62,4 +61,11 @@ public interface IoServices<T extends PersistentClass> {
    */
   List<Repair> loadRepairData(String fileName);
 
+  public void readOwnersCsv(String fileName);
+
+  public void readPropertyCsv(String fileName);
+
+  public void readRepairCsv(String fileName);
+
+  public void relationshipsBetweenObjects();
 }
