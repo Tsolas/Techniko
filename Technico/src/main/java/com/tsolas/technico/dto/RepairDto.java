@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RepairDto {
 
+  private int id;
   private RepairType repairType;
   private String repairDescription;
   private String submissionDate;
@@ -25,6 +26,7 @@ public class RepairDto {
 
   public RepairDto(Repair repair) {
     if (repair != null) {
+      this.id = repair.getId();
       this.repairType = repair.getRepairType();
       this.repairDescription = repair.getRepairDescription();
       this.submissionDate = repair.getSubmissionDate();
@@ -40,6 +42,7 @@ public class RepairDto {
 
   public Repair asRepair() {
     Repair repair = new Repair();
+    repair.setId(id);
     repair.setRepairType(repairType);
     repair.setRepairDescription(repairDescription);
     repair.setSubmissionDate(submissionDate);

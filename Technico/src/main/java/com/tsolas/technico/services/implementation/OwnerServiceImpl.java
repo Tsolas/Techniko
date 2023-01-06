@@ -198,7 +198,7 @@ public class OwnerServiceImpl implements OwnerService {
   @Override
   public RestApiResult<PropertyOwnerDto> getOwner(int ownerId) {
     PropertyOwnerDto ownerDto = new PropertyOwnerDto(propertyOwnerRepository.findById(ownerId));
-    return new RestApiResult<PropertyOwnerDto>(ownerDto, 0, "successful");
+    return new RestApiResult<>(ownerDto, 0, "successful");
   }
 
   @Override

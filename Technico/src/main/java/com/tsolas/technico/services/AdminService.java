@@ -1,13 +1,16 @@
 package com.tsolas.technico.services;
 
 import com.tsolas.technico.model.Repair;
+import java.util.List;
 
 public interface AdminService {
 
   /**
-   * This method prints a list of all pending repairs
+   * Returns a list of the pending repairs
+   *
+   * @return
    */
-  void displayPendingRepairs();
+  List<Repair> getPendingRepairs();
 
   /**
    * This method updates the cost value to the proposed by the admin
@@ -27,7 +30,7 @@ public interface AdminService {
   void proposeDates(Repair repair, String startDate, String endDate);
 
   /**
-   * This method displays a list of the final start and end dates of the repairs
+   * Returns a list of the final start and end dates of the repairs
    */
-  void displayActualDatesOfPendingRepairs();
+  List<Repair> getActualDatesOfPendingRepairs();
 }

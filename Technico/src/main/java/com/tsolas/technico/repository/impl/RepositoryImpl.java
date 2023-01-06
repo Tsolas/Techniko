@@ -17,4 +17,18 @@ public class RepositoryImpl<T extends PersistentClass> implements Repository<T> 
     entityManager.persist(t);
     return t.getId();
   }
+
+  @Override
+  public String checkRole(String username, String password) {
+    try {
+      return entityManager.createQuery("select u.role from AppUser u where username=:u1 and password=:u2")
+              .setParameter("u1", username)
+              .setParameter("u2", password)
+              .getSingleResult()
+              .toString();
+    } catch (Exception e) {
+      return "";
+    }
+  }
+
 }

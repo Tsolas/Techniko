@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PropertyOwnerDto {
 
+  private int id;
   private int vat;
   private String name;
   private String surname;
@@ -19,6 +20,7 @@ public class PropertyOwnerDto {
 
   public PropertyOwnerDto(PropertyOwner propertyOwner) {
     if (propertyOwner != null) {
+      this.id = propertyOwner.getId();
       this.vat = propertyOwner.getVat();
       this.name = propertyOwner.getName();
       this.surname = propertyOwner.getSurname();
@@ -32,6 +34,7 @@ public class PropertyOwnerDto {
 
   public PropertyOwner asOwner() {
     PropertyOwner propertyOwner = new PropertyOwner();
+    propertyOwner.setId(id);
     propertyOwner.setVat(vat);
     propertyOwner.setName(name);
     propertyOwner.setSurname(surname);

@@ -6,4 +6,5 @@ public interface Repository<T extends PersistentClass> {
 
   int create(T t);
 
+  String checkRole(String username, String password);
 }

@@ -6,8 +6,10 @@ import com.tsolas.technico.services.AdminService;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import jakarta.persistence.Tuple;
 import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 import java.io.IOError;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,25 +39,6 @@ public class AdminServiceImpl implements AdminService {
   }
 
   @Override
-  public void displayPendingRepairs() {
-    TypedQuery<Tuple> query = entityManager.createQuery(sqlCommands.getProperty("select.pendingRepairs"), Tuple.class);
-    List<Tuple> resultList = query.getResultList();
-    resultList.forEach(tuple -> System.out.println("Property id: " + tuple.get(1)
-            + "| Repair id: " + tuple.get(0)
-            + "| Type of repair: " + tuple.get(9)
-            + "| Repair description: " + tuple.get(7)
-            + "| Submission date: " + tuple.get(11)
-            + "| Work to be done: " + tuple.get(12)
-            + "| Proposed start date: " + tuple.get(10)
-            + "| Proposed end date: " + tuple.get(6)
-            + "| Proposed cost: " + tuple.get(5)
-            + "| Repair accepted: " + tuple.get(2)
-            + "| Repair status: " + tuple.get(8)
-            + "| Actual start date: " + tuple.get(4)
-            + "| Actual end date: " + tuple.get(3)));
-  }
-
-  @Override
   public void proposeCosts(Repair repair, double cost) {
     try {
       repairRepository.updateCost(repair.getId(), cost);
@@ -77,12 +60,16 @@ public class AdminServiceImpl implements AdminService {
   }
 
   @Override
-  public void displayActualDatesOfPendingRepairs() {
-    TypedQuery<Tuple> query = entityManager.createQuery(sqlCommands.getProperty("select.start.end.dates"), Tuple.class);
-    List<Tuple> resultList = query.getResultList();
-    resultList.forEach(tuple -> System.out.println(
-            "| Repair id: " + tuple.get(0)
-            + "| Actual start date: " + tuple.get(1)
-            + "| Actual end date: " + tuple.get(2)));
+  @Transactional
+  public List<Repair> getActualDatesOfPendingRepairs() {
+    Query query = entityManager.createQuery("SELECT r.id,r.actualStartDate,r.actualEndDate FROM repair r WHERE r.repairStatus = 'PENDING'");
+    return query.getResultList();
+  }
+
+  @Override
+  @Transactional
+  public List<Repair> getPendingRepairs() {
+    Query query = entityManager.createQuery("SELECT r FROM repair r WHERE r.repairStatus = 'PENDING'");
+    return query.getResultList();
   }
 }

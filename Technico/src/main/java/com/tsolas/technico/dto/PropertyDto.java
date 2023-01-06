@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PropertyDto {
 
+  private int id;
   private int e9;
   private String address;
   private String yearOfConstruction;
@@ -21,6 +22,7 @@ public class PropertyDto {
 
   public PropertyDto(Property property) {
     if (property != null) {
+      this.id = property.getId();
       this.e9 = property.getE9();
       this.address = property.getAddress();
       this.yearOfConstruction = property.getYearOfConstruction();
