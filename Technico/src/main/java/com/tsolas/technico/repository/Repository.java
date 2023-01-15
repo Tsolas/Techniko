@@ -1,10 +1,15 @@
 package com.tsolas.technico.repository;
 
 import com.tsolas.technico.model.PersistentClass;
+import java.util.List;
 
 public interface Repository<T extends PersistentClass> {
 
-  int create(T t);
+  T create(T t);
 
-  String checkRole(String username, String password);
+  T read(int id);
+
+  List<T> readAll();
+
+  boolean delete(int id);
 }

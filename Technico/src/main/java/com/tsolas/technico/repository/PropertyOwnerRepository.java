@@ -5,29 +5,16 @@ import java.util.List;
 
 public interface PropertyOwnerRepository extends Repository<PropertyOwner> {
 
-  PropertyOwner search(int id);
+  PropertyOwner findbyVat(int vat);
 
-  PropertyOwner search(String email);
+  PropertyOwner findbyEmail(String email);
 
-  void updateAddress(int id, String address);
+  List<PropertyOwner> findEmails(String email);
 
-  void updateEmail(int id, String email);
+  List<PropertyOwner> findVats(int vat);
 
-  void updatePassword(int id, String password);
+  List<PropertyOwner> findUsernames(String username);
 
-  boolean delete(int id);
+  String checkRole(String username, String password);
 
-  List<PropertyOwner> read(String ownerName);
-
-  List<PropertyOwner> readAll();
-
-  void createPropertyOwner(PropertyOwner propertyOwner);
-
-  PropertyOwner findById(int id);
-
-  PropertyOwner findByVat(int vat);
-
-  PropertyOwner findByEmail(String email);
-
-  boolean deleteOwner(int id);
 }

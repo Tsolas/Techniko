@@ -1,155 +1,82 @@
 package com.tsolas.technico.repository.impl;
 
-import com.tsolas.technico.model.Property;
 import com.tsolas.technico.model.PropertyOwner;
 import com.tsolas.technico.repository.PropertyOwnerRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.TypedQuery;
+import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
-import java.io.IOError;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
-import java.util.Properties;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class PropertyOwnerRepositoryImpl extends RepositoryImpl<PropertyOwner> implements PropertyOwnerRepository {
 
-  private static final Logger logger = LogManager.getLogger(PropertyOwnerRepositoryImpl.class);
-  private final Properties sqlCommands = new Properties();
-
-  {
-    final ClassLoader loader = getClass().getClassLoader();
-    try ( InputStream config = loader.getResourceAsStream("sql.properties")) {
-      sqlCommands.load(config);
-    } catch (IOException e) {
-      throw new IOError(e);
-    }
-  }
-
-  @PersistenceContext
-  private EntityManager entityManager;
-
   @Override
-  public PropertyOwner search(int id) {
-    return entityManager.find(PropertyOwner.class, id);
+  public Class<PropertyOwner> getClassType() {
+    return PropertyOwner.class;
   }
 
   @Override
-  public PropertyOwner search(String email) {
-    return entityManager.find(PropertyOwner.class, email);
+  public String getClassName() {
+    return "propertyowner";
   }
 
   @Override
-  public void updateAddress(int id, String address) {
-    PropertyOwner propertyOwner = entityManager.find(PropertyOwner.class, id);
-    try {
-      propertyOwner.setAddress(address);
-      entityManager.getTransaction().begin();
-      entityManager.persist(propertyOwner);
-      entityManager.getTransaction().commit();
-      logger.info("The owner's address has been updated");
-    } catch (Exception e) {
-      logger.warn("The owner's address could not get updated", e);
-    }
+  public PropertyOwner findbyVat(int vat) {
+    return em.createQuery("SELECT p from propertyowner p where p.vat =:vat", PropertyOwner.class)
+            .setParameter("vat", vat).getSingleResult();
   }
 
   @Override
-  public void updateEmail(int id, String email) {
-    PropertyOwner propertyOwner = entityManager.find(PropertyOwner.class, id);
-    propertyOwner.setEmail(email);
-    entityManager.getTransaction().begin();
-    entityManager.persist(propertyOwner);
-    entityManager.getTransaction().commit();
-    logger.info("The owner's email has been updated.");
+  public PropertyOwner findbyEmail(String email) {
+    return em.createQuery("SELECT p from propertyowner p where p.email =:email", PropertyOwner.class)
+            .setParameter("email", email).getSingleResult();
   }
 
   @Override
-  public void updatePassword(int id, String password) {
-    PropertyOwner propertyOwner = entityManager.find(PropertyOwner.class, id);
-    try {
-      propertyOwner.setPassword(password);
-      entityManager.getTransaction().begin();
-      entityManager.persist(propertyOwner);
-      entityManager.getTransaction().commit();
-      logger.info("The owner's password has been updated.");
-    } catch (Exception e) {
-      logger.warn("The owner's password could not get updated", e);
-    }
-  }
-
-  @Override
+  @Transactional
   public boolean delete(int id) {
-    List<Property> propertyList = entityManager.createQuery("select p from property p where p.owner.id=:ownerId", Property.class)
-            .setParameter("ownerId", id).getResultList();
-    try {
-      for (Property property : propertyList) {
-        entityManager.getTransaction().begin();
-        entityManager.find(Property.class, property.getId());
-        entityManager.remove(property);
-        entityManager.getTransaction().commit();
-      }
-      PropertyOwner propertyOwner = entityManager.find(PropertyOwner.class, id);
-      entityManager.getTransaction().begin();
-      entityManager.remove(propertyOwner);
-      entityManager.getTransaction().commit();
-      logger.info("Deletion successfull");
-    } catch (Exception e) {
-      logger.warn("Deletion failed", e);
-    }
-    return true;
-  }
-
-  @Override
-  public List<PropertyOwner> read(String ownerName) {
-    return entityManager.createQuery(sqlCommands.getProperty("select.owner.byName"), PropertyOwner.class).setParameter("name", ownerName).getResultList();
-  }
-
-  @Override
-  public List<PropertyOwner> readAll() {
-    List<PropertyOwner> results = entityManager.createQuery(sqlCommands.getProperty("select.owners"))
-            .getResultList();
-    return results;
-  }
-
-  @Override
-  @Transactional
-  public void createPropertyOwner(PropertyOwner propertyOwner) {
-    entityManager.persist(propertyOwner);
-  }
-
-  @Override
-  @Transactional
-  public PropertyOwner findById(int id) {
-    PropertyOwner propertyOwner = entityManager.find(PropertyOwner.class, id);
-    return propertyOwner;
-  }
-
-  @Override
-  @Transactional
-  public PropertyOwner findByVat(int vat) {
-    TypedQuery<PropertyOwner> query = entityManager.createQuery("SELECT p from propertyowner p where p.vat =:vat", PropertyOwner.class);
-    query.setParameter("vat", vat);
-    return query.getSingleResult();
-  }
-
-  @Override
-  public PropertyOwner findByEmail(String email) {
-    TypedQuery<PropertyOwner> query = entityManager.createQuery("SELECT p FROM propertyowner p WHERE p.email = :email", PropertyOwner.class);
-    query.setParameter("email", email);
-    return query.getSingleResult();
-  }
-
-  @Override
-  public boolean deleteOwner(int id) {
-    PropertyOwner propertyOwner = entityManager.find(PropertyOwner.class, id);
+    PropertyOwner propertyOwner = read(id);
+    Query query = em.createQuery("UPDATE property p SET p.owner = null WHERE p.owner = :propertyOwner");
+    query.setParameter("propertyOwner", propertyOwner);
+    query.executeUpdate();
+    em.remove(propertyOwner);
     if (propertyOwner == null) {
       return false;
     }
-    entityManager.remove(propertyOwner);
+    em.remove(propertyOwner);
     return true;
+  }
+
+  @Override
+  public List<PropertyOwner> findEmails(String email) {
+    return em.createQuery("SELECT p FROM propertyowner p WHERE p.email = :email", PropertyOwner.class)
+            .setParameter("email", email)
+            .getResultList();
+  }
+
+  @Override
+  public List<PropertyOwner> findVats(int vat) {
+    return em.createQuery("SELECT p FROM propertyowner p WHERE p.vat = :vat", PropertyOwner.class)
+            .setParameter("vat", vat)
+            .getResultList();
+  }
+
+  @Override
+  public List<PropertyOwner> findUsernames(String username) {
+    return em.createQuery("SELECT p FROM propertyowner p WHERE p.username = :username", PropertyOwner.class)
+            .setParameter("username", username)
+            .getResultList();
+  }
+
+  @Override
+  public String checkRole(String username, String password) {
+    try {
+      return em.createQuery("SELECT p.role from propertyowner p where username=:u1 and password=:u2")
+              .setParameter("u1", username)
+              .setParameter("u2", password)
+              .getSingleResult()
+              .toString();
+    } catch (Exception e) {
+      return "";
+    }
   }
 
 }

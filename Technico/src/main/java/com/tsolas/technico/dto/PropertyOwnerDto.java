@@ -17,22 +17,22 @@ public class PropertyOwnerDto {
   private String email;
   private String username;
   private String password;
+  private String role;
 
   public PropertyOwnerDto(PropertyOwner propertyOwner) {
-    if (propertyOwner != null) {
-      this.id = propertyOwner.getId();
-      this.vat = propertyOwner.getVat();
-      this.name = propertyOwner.getName();
-      this.surname = propertyOwner.getSurname();
-      this.address = propertyOwner.getAddress();
-      this.phoneNumber = propertyOwner.getPhoneNumber();
-      this.email = propertyOwner.getEmail();
-      this.username = propertyOwner.getUsername();
-      this.password = propertyOwner.getPassword();
-    }
+    this.id = propertyOwner.getId();
+    this.vat = propertyOwner.getVat();
+    this.name = propertyOwner.getName();
+    this.surname = propertyOwner.getSurname();
+    this.address = propertyOwner.getAddress();
+    this.phoneNumber = propertyOwner.getPhoneNumber();
+    this.email = propertyOwner.getEmail();
+    this.username = propertyOwner.getUsername();
+    this.password = propertyOwner.getPassword();
+    this.role = propertyOwner.getRole();
   }
 
-  public PropertyOwner asOwner() {
+  public PropertyOwner asPropertyOwner() {
     PropertyOwner propertyOwner = new PropertyOwner();
     propertyOwner.setId(id);
     propertyOwner.setVat(vat);
@@ -43,7 +43,7 @@ public class PropertyOwnerDto {
     propertyOwner.setEmail(email);
     propertyOwner.setUsername(username);
     propertyOwner.setPassword(password);
+    propertyOwner.setRole(role);
     return propertyOwner;
-
   }
 }

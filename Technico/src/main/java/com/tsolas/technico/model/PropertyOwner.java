@@ -1,5 +1,6 @@
 package com.tsolas.technico.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -13,26 +14,18 @@ import lombok.NoArgsConstructor;
 @Table
 public class PropertyOwner extends PersistentClass {
 
-  // id is in PersistenceClass
+  @Column(unique = true)
   private int vat;
   private String name;
   private String surname;
   private String address;
   private String phoneNumber;
+  @Column(unique = true)
   private String email;
+  @Column(unique = true)
   private String username;
   private String password;
+  private String role;
   @OneToMany(mappedBy = "owner", orphanRemoval = true)
   private List<Property> properties;
-
-  public PropertyOwner(int vat, String name, String surname, String address, String phoneNumber, String email, String username, String password) {
-    this.vat = vat;
-    this.name = name;
-    this.surname = surname;
-    this.address = address;
-    this.phoneNumber = phoneNumber;
-    this.email = email;
-    this.username = username;
-    this.password = password;
-  }
 }

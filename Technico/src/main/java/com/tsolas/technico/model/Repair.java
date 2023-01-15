@@ -34,15 +34,4 @@ public class Repair extends PersistentClass {
   private String actualStartDate;
   private String actualEndDate;
 
-  public Repair(String repairDescription, String submissionDate, String startDate, double cost, boolean acceptance, RepairStatus repairStatus) {
-    this.repairDescription = repairDescription;
-    this.submissionDate = submissionDate;
-    this.startDate = startDate;
-    this.cost = cost;
-    this.acceptance = acceptance;
-    this.repairStatus = repairStatus;
-    this.actualStartDate = actualStartDate;
-    this.actualEndDate = actualEndDate;
-  }
-
 }

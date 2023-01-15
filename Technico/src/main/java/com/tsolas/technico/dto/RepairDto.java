@@ -3,10 +3,12 @@ package com.tsolas.technico.dto;
 import com.tsolas.technico.enums.RepairStatus;
 import com.tsolas.technico.enums.RepairType;
 import com.tsolas.technico.model.Repair;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
 public class RepairDto {
 
@@ -22,22 +24,20 @@ public class RepairDto {
   private RepairStatus repairStatus;
   private String actualStartDate;
   private String actualEndDate;
-  private PropertyDto property;
 
   public RepairDto(Repair repair) {
-    if (repair != null) {
-      this.id = repair.getId();
-      this.repairType = repair.getRepairType();
-      this.repairDescription = repair.getRepairDescription();
-      this.submissionDate = repair.getSubmissionDate();
-      this.workDescription = repair.getWorkDescription();
-      this.startDate = repair.getStartDate();
-      this.endDate = repair.getEndDate();
-      this.cost = repair.getCost();
-      this.repairStatus = repair.getRepairStatus();
-      this.actualStartDate = repair.getActualStartDate();
-      this.actualEndDate = repair.getActualEndDate();
-    }
+    this.id = repair.getId();
+    this.repairType = repair.getRepairType();
+    this.repairDescription = repair.getRepairDescription();
+    this.submissionDate = repair.getSubmissionDate();
+    this.workDescription = repair.getWorkDescription();
+    this.startDate = repair.getStartDate();
+    this.endDate = repair.getEndDate();
+    this.cost = repair.getCost();
+    this.repairStatus = repair.getRepairStatus();
+    this.actualStartDate = repair.getActualStartDate();
+    this.actualEndDate = repair.getActualEndDate();
+    this.acceptance = repair.isAcceptance();
   }
 
   public Repair asRepair() {
@@ -52,7 +52,8 @@ public class RepairDto {
     repair.setCost(cost);
     repair.setRepairStatus(repairStatus);
     repair.setActualStartDate(actualStartDate);
-    repair.setEndDate(endDate);
+    repair.setActualEndDate(actualEndDate);
+    repair.setAcceptance(acceptance);
     return repair;
   }
 }

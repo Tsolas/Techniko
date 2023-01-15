@@ -10,12 +10,13 @@ import java.io.IOException;
 public class CorsFilter implements ContainerResponseFilter {
 
   @Override
-  public void filter(ContainerRequestContext requestContext,
-          ContainerResponseContext responseContext) throws IOException {
-    responseContext.getHeaders().add("Access-Control-Allow-Origin", "*");
-    responseContext.getHeaders().add("Access-Control-Allow-Credentials", "true");
-    responseContext.getHeaders().add("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE");
-    responseContext.getHeaders().add("Access-Control-Allow-Headers", "username, password, X-Requested-With, Content-Type, Authorization, Origin, Accept, Access-Control-Request-Method, Access-Control-Request-Headers");
-    responseContext.getHeaders().add("Access-Control-Max-Age", "1209600");
+  public void filter(ContainerRequestContext crc, ContainerResponseContext crc1) throws IOException {
+    crc1.getHeaders().add("Access-Control-Allow-Origin", "*");
+    crc1.getHeaders().add("Access-Control-Allow-Credentials", "true");
+    crc1.getHeaders().add("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE");
+    crc1.getHeaders().add("Access-Control-Allow-Headers", "username, password, X-Requested-With, Content-Type, Authorization, Origin, Accept, Access-Control-Request-Method, Access-Control-Request-Headers");
+    crc1.getHeaders().add("Access-Control-Max-Age", "1209600");
+    crc1.getHeaders().add("Access-Control-Allow-Headers", "origin, content-type, accept, authorization, crossdomain");
   }
+
 }
