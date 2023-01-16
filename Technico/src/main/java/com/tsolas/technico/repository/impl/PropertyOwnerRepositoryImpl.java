@@ -79,4 +79,12 @@ public class PropertyOwnerRepositoryImpl extends RepositoryImpl<PropertyOwner> i
     }
   }
 
+  @Override
+  public PropertyOwner findByUserameAndPass(String username, String password) {
+    return em.createQuery("select u from propertyowner u where username=:u1 and password=:u2", PropertyOwner.class)
+            .setParameter("u1", username)
+            .setParameter("u2", password)
+            .getSingleResult();
+  }
+
 }

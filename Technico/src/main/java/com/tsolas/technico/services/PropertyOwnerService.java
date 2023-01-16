@@ -74,4 +74,6 @@ public interface PropertyOwnerService {
   PropertyOwnerDto changeUsername(int id, String username);
 
   PropertyOwnerDto changeVat(int id, int vat);
+
+  PropertyOwnerDto getUser(String authorization);
 }

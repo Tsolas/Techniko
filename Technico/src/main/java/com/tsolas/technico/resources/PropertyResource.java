@@ -13,6 +13,7 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import com.tsolas.technico.services.PropertyService;
+import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import java.util.List;
 
@@ -26,7 +27,8 @@ public class PropertyResource {
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   @Path("/addProperty/ownerId/{ownerId}")
-  @RolesAllowed({"ADMIN", "USER"})
+  //@RolesAllowed({"ADMIN", "USER"})
+  @PermitAll
   public PropertyDto insertProperty(PropertyDto property, @PathParam("ownerId") int ownerId) {
     return propertyService.addNewProperty(ownerId, property);
   }

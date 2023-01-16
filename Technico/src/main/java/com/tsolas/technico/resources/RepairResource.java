@@ -14,6 +14,7 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import com.tsolas.technico.services.RepairService;
+import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import java.util.List;
 
@@ -27,7 +28,8 @@ public class RepairResource {
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   @Path("/addRepair/propertyId/{propertyId}")
-  @RolesAllowed({"ADMIN", "USER"})
+  //@RolesAllowed({"ADMIN", "USER"})
+  @PermitAll
   public RepairDto insertRepair(RepairDto repair, @PathParam("propertyId") int propertyId) {
     return repairService.addNewRepair(propertyId, repair);
   }

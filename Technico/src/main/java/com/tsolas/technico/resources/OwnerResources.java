@@ -14,6 +14,7 @@ import jakarta.ws.rs.core.MediaType;
 import com.tsolas.technico.services.PropertyOwnerService;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
+import jakarta.ws.rs.HeaderParam;
 import java.util.List;
 
 @Path("/ownersResource")
@@ -22,19 +23,12 @@ public class OwnerResources {
   @Inject
   private PropertyOwnerService ownerService;
 
-  @GET
-  @Produces(MediaType.APPLICATION_JSON)
-  @Consumes(MediaType.APPLICATION_JSON)
-  @PermitAll
-  public String home() {
-    return "This is a stakeholder";
-  }
-
   @POST
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   @Path("/addOwner")
-  @RolesAllowed({"ADMIN", "USER"})
+  //@RolesAllowed({"ADMIN", "USER"})
+  @PermitAll
   public PropertyOwnerDto insert(PropertyOwnerDto owner) {
     return ownerService.addNewOwner(owner);
   }
@@ -154,5 +148,14 @@ public class OwnerResources {
   public PropertyOwnerDto updateVat(@PathParam("id") int id, String vatString) {
     int vat = Integer.parseInt(vatString);
     return ownerService.changeVat(id, vat);
+  }
+
+  @POST
+  @Path("/login")
+  @RolesAllowed({"ADMIN", "USER"})
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public PropertyOwnerDto loginUser(@HeaderParam("Authorization") String authorization) {
+    return ownerService.getUser(authorization);
   }
 }

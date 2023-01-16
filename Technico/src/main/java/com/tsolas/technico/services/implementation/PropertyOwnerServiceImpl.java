@@ -8,6 +8,8 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.tsolas.technico.services.PropertyOwnerService;
+import java.util.Base64;
+import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
 public class PropertyOwnerServiceImpl implements PropertyOwnerService {
@@ -33,7 +35,7 @@ public class PropertyOwnerServiceImpl implements PropertyOwnerService {
     List<PropertyOwner> usernames = ownerRepository.findUsernames(owner.getUsername());
     if (!usernames.isEmpty()) {
       logger.warn("Email already in use by another property owner");
-      throw new IllegalArgumentException("Email already in use by another property owner");
+      throw new IllegalArgumentException("Username already in use by another property owner");
     }
     ownerRepository.create(owner);
     logger.info("Adding new owner: " + ownerDto.toString());
@@ -176,5 +178,15 @@ public class PropertyOwnerServiceImpl implements PropertyOwnerService {
     logger.info("Changing vat of owner with id: " + id + "to :" + vat);
     ownerRepository.create(propertyOwner);
     return new PropertyOwnerDto(propertyOwner);
+  }
+
+  @Override
+  public PropertyOwnerDto getUser(String authorization) {
+    final String encodedUserPassword = authorization.replaceFirst("Basic" + " ", "");
+    String usernameAndPassword = new String(Base64.getDecoder().decode(encodedUserPassword.getBytes()));
+    final StringTokenizer tokenizer = new StringTokenizer(usernameAndPassword, ":");
+    final String username = tokenizer.nextToken();
+    final String password = tokenizer.nextToken();
+    return new PropertyOwnerDto(ownerRepository.findByUserameAndPass(username, password));
   }
 }

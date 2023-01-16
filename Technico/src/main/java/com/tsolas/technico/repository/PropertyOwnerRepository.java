@@ -17,4 +17,5 @@ public interface PropertyOwnerRepository extends Repository<PropertyOwner> {
 
   String checkRole(String username, String password);
 
+  PropertyOwner findByUserameAndPass(String username, String password);
 }
