@@ -27,7 +27,7 @@ public class PropertyOwnerServiceImpl implements PropertyOwnerService {
       logger.warn("Email already in use by another property owner");
       throw new IllegalArgumentException("Email already in use by another property owner");
     }
-    List<PropertyOwner> vats = ownerRepository.findVats(owner.getVat());
+    List<PropertyOwner> vats = ownerRepository.findVats(owner.getVat(), owner.getId());
     if (!vats.isEmpty()) {
       logger.warn("User with this Vat already exists");
       throw new IllegalArgumentException("User with this Vat already exists");
@@ -156,7 +156,7 @@ public class PropertyOwnerServiceImpl implements PropertyOwnerService {
     }
     List<PropertyOwner> usernames = ownerRepository.findUsernames(propertyOwner.getUsername());
     if (!usernames.isEmpty()) {
-      throw new IllegalArgumentException("Email already in use by another property owner");
+      throw new IllegalArgumentException("Username already in use by another property owner");
     }
     propertyOwner.setUsername(username);
     logger.info("Changing username of owner with id: " + id + "to :" + username);
@@ -170,9 +170,9 @@ public class PropertyOwnerServiceImpl implements PropertyOwnerService {
     if (propertyOwner == null) {
       return null;
     }
-    List<PropertyOwner> vats = ownerRepository.findVats(propertyOwner.getVat());
-    if (!vats.isEmpty()) {
-      throw new IllegalArgumentException("User with this Vat already exists");
+    List<PropertyOwner> allvats = ownerRepository.findVats(propertyOwner.getVat(), id);
+    if (!allvats.isEmpty()) {
+      throw new IllegalArgumentException("User with this Vat already exists  " + allvats.size());
     }
     propertyOwner.setVat(vat);
     logger.info("Changing vat of owner with id: " + id + "to :" + vat);

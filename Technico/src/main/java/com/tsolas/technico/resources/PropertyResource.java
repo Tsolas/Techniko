@@ -65,7 +65,7 @@ public class PropertyResource {
   @RolesAllowed({"ADMIN", "USER"})
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  public PropertyDto returnOwnerByVat(@PathParam("e9") int e9) {
+  public PropertyDto returnOwnerByE9(@PathParam("e9") int e9) {
     return propertyService.getPropertyByE9(e9);
   }
 
@@ -92,7 +92,7 @@ public class PropertyResource {
   @RolesAllowed({"ADMIN", "USER"})
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.TEXT_PLAIN)
-  public PropertyDto updateAddress(@PathParam("id") int id, int newE9) {
+  public PropertyDto updateE9(@PathParam("id") int id, int newE9) {
     return propertyService.changeE9(id, newE9);
   }
 

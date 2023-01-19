@@ -53,9 +53,10 @@ public class PropertyOwnerRepositoryImpl extends RepositoryImpl<PropertyOwner> i
   }
 
   @Override
-  public List<PropertyOwner> findVats(int vat) {
-    return em.createQuery("SELECT p FROM propertyowner p WHERE p.vat = :vat", PropertyOwner.class)
+  public List<PropertyOwner> findVats(int vat, int id) {
+    return em.createQuery("SELECT p FROM propertyowner p WHERE p.vat = :vat AND p.id != :id", PropertyOwner.class)
             .setParameter("vat", vat)
+            .setParameter("id", id)
             .getResultList();
   }
 

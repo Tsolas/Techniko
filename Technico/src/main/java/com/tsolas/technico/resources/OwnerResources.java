@@ -145,14 +145,14 @@ public class OwnerResources {
   @RolesAllowed({"ADMIN", "USER"})
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.TEXT_PLAIN)
-  public PropertyOwnerDto updateVat(@PathParam("id") int id, String vatString) {
-    int vat = Integer.parseInt(vatString);
+  public PropertyOwnerDto updateVat(@PathParam("id") int id, int vat) {
+    //int vat = Integer.parseInt(vatString);
     return ownerService.changeVat(id, vat);
   }
 
   @POST
   @Path("/login")
-  @RolesAllowed({"ADMIN", "USER"})
+  @PermitAll
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public PropertyOwnerDto loginUser(@HeaderParam("Authorization") String authorization) {

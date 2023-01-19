@@ -11,7 +11,7 @@ public interface PropertyOwnerRepository extends Repository<PropertyOwner> {
 
   List<PropertyOwner> findEmails(String email);
 
-  List<PropertyOwner> findVats(int vat);
+  List<PropertyOwner> findVats(int vat, int id);
 
   List<PropertyOwner> findUsernames(String username);
 
