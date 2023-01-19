@@ -40,9 +40,10 @@ public class PropertyRepositoryImpl extends RepositoryImpl<Property> implements 
   }
 
   @Override
-  public List<Property> findE9s(int e9) {
-    return em.createQuery("SELECT p FROM property p WHERE p.e9 = :e9", Property.class)
+  public List<Property> findE9s(int e9, int id) {
+    return em.createQuery("SELECT p FROM property p WHERE p.e9 = :e9 AND p.id != :id", Property.class)
             .setParameter("e9", e9)
+            .setParameter("id", id)
             .getResultList();
   }
 

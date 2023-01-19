@@ -22,7 +22,7 @@ public class PropertyOwnerServiceImpl implements PropertyOwnerService {
   @Override
   public PropertyOwnerDto addNewOwner(PropertyOwnerDto ownerDto) {
     PropertyOwner owner = ownerDto.asPropertyOwner();
-    List<PropertyOwner> emails = ownerRepository.findEmails(owner.getEmail());
+    List<PropertyOwner> emails = ownerRepository.findEmails(owner.getEmail(), owner.getId());
     if (!emails.isEmpty()) {
       logger.warn("Email already in use by another property owner");
       throw new IllegalArgumentException("Email already in use by another property owner");
@@ -32,7 +32,7 @@ public class PropertyOwnerServiceImpl implements PropertyOwnerService {
       logger.warn("User with this Vat already exists");
       throw new IllegalArgumentException("User with this Vat already exists");
     }
-    List<PropertyOwner> usernames = ownerRepository.findUsernames(owner.getUsername());
+    List<PropertyOwner> usernames = ownerRepository.findUsernames(owner.getUsername(), owner.getId());
     if (!usernames.isEmpty()) {
       logger.warn("Email already in use by another property owner");
       throw new IllegalArgumentException("Username already in use by another property owner");
@@ -90,7 +90,7 @@ public class PropertyOwnerServiceImpl implements PropertyOwnerService {
     if (propertyOwner == null) {
       return null;
     }
-    List<PropertyOwner> results = ownerRepository.findEmails(email);
+    List<PropertyOwner> results = ownerRepository.findEmails(email, id);
     if (!results.isEmpty()) {
       throw new IllegalArgumentException("Email already in use by another property owner");
     }
@@ -154,7 +154,7 @@ public class PropertyOwnerServiceImpl implements PropertyOwnerService {
     if (propertyOwner == null) {
       return null;
     }
-    List<PropertyOwner> usernames = ownerRepository.findUsernames(propertyOwner.getUsername());
+    List<PropertyOwner> usernames = ownerRepository.findUsernames(propertyOwner.getUsername(), propertyOwner.getId());
     if (!usernames.isEmpty()) {
       throw new IllegalArgumentException("Username already in use by another property owner");
     }

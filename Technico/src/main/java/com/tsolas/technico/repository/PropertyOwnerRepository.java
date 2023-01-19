@@ -9,11 +9,11 @@ public interface PropertyOwnerRepository extends Repository<PropertyOwner> {
 
   PropertyOwner findbyEmail(String email);
 
-  List<PropertyOwner> findEmails(String email);
+  List<PropertyOwner> findEmails(String email, int id);
 
   List<PropertyOwner> findVats(int vat, int id);
 
-  List<PropertyOwner> findUsernames(String username);
+  List<PropertyOwner> findUsernames(String username, int id);
 
   String checkRole(String username, String password);
 

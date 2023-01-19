@@ -46,9 +46,10 @@ public class PropertyOwnerRepositoryImpl extends RepositoryImpl<PropertyOwner> i
   }
 
   @Override
-  public List<PropertyOwner> findEmails(String email) {
-    return em.createQuery("SELECT p FROM propertyowner p WHERE p.email = :email", PropertyOwner.class)
+  public List<PropertyOwner> findEmails(String email, int id) {
+    return em.createQuery("SELECT p FROM propertyowner p WHERE p.email = :email AND p.id != :id", PropertyOwner.class)
             .setParameter("email", email)
+            .setParameter("id", id)
             .getResultList();
   }
 
@@ -61,9 +62,10 @@ public class PropertyOwnerRepositoryImpl extends RepositoryImpl<PropertyOwner> i
   }
 
   @Override
-  public List<PropertyOwner> findUsernames(String username) {
-    return em.createQuery("SELECT p FROM propertyowner p WHERE p.username = :username", PropertyOwner.class)
+  public List<PropertyOwner> findUsernames(String username, int id) {
+    return em.createQuery("SELECT p FROM propertyowner p WHERE p.username = :username AND p.id != :id", PropertyOwner.class)
             .setParameter("username", username)
+            .setParameter("id", id)
             .getResultList();
   }
 

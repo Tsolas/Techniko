@@ -33,7 +33,7 @@ public class PropertyServiceImpl implements PropertyService {
       throw new IllegalArgumentException("Invalid PropertyType value: " + propertyDto.getPropertyType());
     }
     Property property = propertyDto.asProperty();
-    List<Property> e9List = propertyRepository.findE9s(property.getE9());
+    List<Property> e9List = propertyRepository.findE9s(property.getE9(), property.getId());
     if (!e9List.isEmpty()) {
       logger.warn("A property with this E9 already exists");
       throw new IllegalArgumentException("A property with this E9 already exists");
@@ -126,7 +126,7 @@ public class PropertyServiceImpl implements PropertyService {
     if (property == null) {
       return null;
     }
-    List<Property> e9List = propertyRepository.findE9s(property.getE9());
+    List<Property> e9List = propertyRepository.findE9s(property.getE9(), property.getId());
     if (!e9List.isEmpty()) {
       throw new IllegalArgumentException("A property with this E9 already exists");
     }
