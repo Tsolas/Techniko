@@ -45,4 +45,10 @@ public class RepairRepositoryImpl extends RepositoryImpl<Repair> implements Repa
     return repairs;
   }
 
+  @Override
+  public List<Repair> findOnGoing() {
+    return em.createQuery("SELECT r FROM repair r WHERE r.repairStatus = :status", Repair.class)
+            .setParameter("status", RepairStatus.IN_PROGRESS).getResultList();
+  }
+
 }

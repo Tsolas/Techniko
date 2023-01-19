@@ -70,6 +70,15 @@ public class RepairResource {
     return repairService.getPendingRepairs();
   }
 
+  @GET
+  @Path("/ongoingRepairs")
+  @RolesAllowed({"ADMIN", "USER"})
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public List<RepairDto> readAllOnGoingRepairs() {
+    return repairService.getOnGoingRepairs();
+  }
+
   @PUT
   @Path("/updateRepairType/repairId/{id}")
   @RolesAllowed({"ADMIN", "USER"})

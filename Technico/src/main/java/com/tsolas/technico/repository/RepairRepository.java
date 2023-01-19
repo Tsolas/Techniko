@@ -7,6 +7,8 @@ public interface RepairRepository extends Repository<Repair> {
 
   List<Repair> findPending();
 
+  List<Repair> findOnGoing();
+
   List<Repair> findbyExactDate(String date);
 
   List<Repair> findRepairsOfOwner(int id);

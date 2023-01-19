@@ -241,4 +241,10 @@ public class RepairServiceImpl implements RepairService {
     return repairRepository.findRepairsOfOwner(id).stream().map(RepairDto::new).collect(Collectors.toList());
   }
 
+  @Override
+  public List<RepairDto> getOnGoingRepairs() {
+    logger.info("Getting all pending repairs");
+    return repairRepository.findOnGoing().stream().map(RepairDto::new).collect(Collectors.toList());
+  }
+
 }

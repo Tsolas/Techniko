@@ -17,6 +17,8 @@ public interface RepairService {
 
   List<RepairDto> getPendingRepairs();
 
+  List<RepairDto> getOnGoingRepairs();
+
   RepairDto changeRepairType(int id, RepairType newRepairType);
 
   RepairDto changeRepairStatus(int id, RepairStatus newRepairStatus);
