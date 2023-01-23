@@ -43,7 +43,7 @@ public interface PropertyOwnerService {
    * @param vat
    * @return
    */
-  PropertyOwnerDto getOwnerByVat(int vat);
+  RestApiResult<PropertyOwnerDto> getOwnerByVat(int vat);
 
   /**
    * Fetches an Owner based on his e-mail address.
@@ -51,7 +51,7 @@ public interface PropertyOwnerService {
    * @param email
    * @return
    */
-  PropertyOwnerDto getOwnerByEmail(String email);
+  RestApiResult<PropertyOwnerDto> getOwnerByEmail(String email);
 
   /**
    * Changes an owner's address.

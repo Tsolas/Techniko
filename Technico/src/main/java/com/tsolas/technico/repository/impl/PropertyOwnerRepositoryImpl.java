@@ -19,15 +19,15 @@ public class PropertyOwnerRepositoryImpl extends RepositoryImpl<PropertyOwner> i
   }
 
   @Override
-  public PropertyOwner findbyVat(int vat) {
+  public List<PropertyOwner> findbyVat(int vat) {
     return em.createQuery("SELECT p from propertyowner p where p.vat =:vat", PropertyOwner.class)
-            .setParameter("vat", vat).getSingleResult();
+            .setParameter("vat", vat).getResultList();
   }
 
   @Override
-  public PropertyOwner findbyEmail(String email) {
+  public List<PropertyOwner> findbyEmail(String email) {
     return em.createQuery("SELECT p from propertyowner p where p.email =:email", PropertyOwner.class)
-            .setParameter("email", email).getSingleResult();
+            .setParameter("email", email).getResultList();
   }
 
   @Override

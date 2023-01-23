@@ -74,7 +74,7 @@ public class PropertyServiceImpl implements PropertyService {
   @Transactional
   @Override
   public List<PropertyDto> getPropertiesByOwnerVat(int vat) {
-    PropertyOwner owner = ownerRepository.findbyVat(vat);
+    PropertyOwner owner = ownerRepository.findbyVat(vat).get(0);
     logger.info("Returning properties that belong to owner with Vat : " + vat);
     return owner.getProperties().stream().map(property -> new PropertyDto(property)).collect(Collectors.toList());
   }

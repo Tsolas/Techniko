@@ -62,15 +62,23 @@ public class PropertyOwnerServiceImpl implements PropertyOwnerService {
   }
 
   @Override
-  public PropertyOwnerDto getOwnerByVat(int vat) {
+  public RestApiResult<PropertyOwnerDto> getOwnerByVat(int vat) {
+    if (ownerRepository.findbyVat(vat).isEmpty()) {
+      return new RestApiResult<>(null, 404, "There is no user with this Vat");
+    }
     logger.info("Returning owner with vat: " + vat);
-    return new PropertyOwnerDto(ownerRepository.findbyVat(vat));
+    PropertyOwnerDto ownerDto = new PropertyOwnerDto(ownerRepository.findbyVat(vat).get(0));
+    return new RestApiResult<>(ownerDto, 0, "Returning owner with vat:" + vat);
   }
 
   @Override
-  public PropertyOwnerDto getOwnerByEmail(String email) {
+  public RestApiResult<PropertyOwnerDto> getOwnerByEmail(String email) {
+    if (ownerRepository.findbyEmail(email).isEmpty()) {
+      return new RestApiResult<>(null, 404, "There is no user with this e-mail");
+    }
     logger.info("Getting owner with e-mail: " + email);
-    return new PropertyOwnerDto(ownerRepository.findbyEmail(email));
+    PropertyOwnerDto ownerDto = new PropertyOwnerDto(ownerRepository.findbyEmail(email).get(0));
+    return new RestApiResult<>(ownerDto, 0, "Returning owner with e-mail:" + email);
   }
 
   @Override

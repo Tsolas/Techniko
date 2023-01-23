@@ -5,9 +5,9 @@ import java.util.List;
 
 public interface PropertyOwnerRepository extends Repository<PropertyOwner> {
 
-  PropertyOwner findbyVat(int vat);
+  List<PropertyOwner> findbyVat(int vat);
 
-  PropertyOwner findbyEmail(String email);
+  List<PropertyOwner> findbyEmail(String email);
 
   List<PropertyOwner> findEmails(String email, int id);
 

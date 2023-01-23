@@ -65,7 +65,7 @@ public class OwnerResources {
   @RolesAllowed({"ADMIN", "USER"})
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  public PropertyOwnerDto returnOwnerByVat(@PathParam("vat") int vat) {
+  public RestApiResult<PropertyOwnerDto> returnOwnerByVat(@PathParam("vat") int vat) {
     return ownerService.getOwnerByVat(vat);
   }
 
@@ -74,7 +74,7 @@ public class OwnerResources {
   @RolesAllowed({"ADMIN", "USER"})
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  public PropertyOwnerDto returnOwnerByVat(@PathParam("email") String email) {
+  public RestApiResult<PropertyOwnerDto> returnOwnerByVat(@PathParam("email") String email) {
     return ownerService.getOwnerByEmail(email);
   }
 
