@@ -1,6 +1,7 @@
 package com.tsolas.technico.resources;
 
 import com.tsolas.technico.dto.PropertyOwnerDto;
+import com.tsolas.technico.dto.RestApiResult;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -29,7 +30,7 @@ public class OwnerResources {
   @Path("/addOwner")
   //@RolesAllowed({"ADMIN", "USER"})
   @PermitAll
-  public PropertyOwnerDto insert(PropertyOwnerDto owner) {
+  public RestApiResult<PropertyOwnerDto> insert(PropertyOwnerDto owner) {
     return ownerService.addNewOwner(owner);
   }
 
@@ -158,4 +159,5 @@ public class OwnerResources {
   public PropertyOwnerDto loginUser(@HeaderParam("Authorization") String authorization) {
     return ownerService.getUser(authorization);
   }
+
 }

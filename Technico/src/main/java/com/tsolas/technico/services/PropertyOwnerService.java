@@ -1,6 +1,7 @@
 package com.tsolas.technico.services;
 
 import com.tsolas.technico.dto.PropertyOwnerDto;
+import com.tsolas.technico.dto.RestApiResult;
 import java.util.List;
 
 public interface PropertyOwnerService {
@@ -11,7 +12,7 @@ public interface PropertyOwnerService {
    * @param ownerDto
    * @return
    */
-  PropertyOwnerDto addNewOwner(PropertyOwnerDto ownerDto);
+  RestApiResult<PropertyOwnerDto> addNewOwner(PropertyOwnerDto ownerDto);
 
   /**
    * deletes an owner

@@ -1,6 +1,7 @@
 package com.tsolas.technico.services.implementation;
 
 import com.tsolas.technico.dto.PropertyOwnerDto;
+import com.tsolas.technico.dto.RestApiResult;
 import com.tsolas.technico.model.PropertyOwner;
 import com.tsolas.technico.repository.PropertyOwnerRepository;
 import jakarta.inject.Inject;
@@ -20,26 +21,26 @@ public class PropertyOwnerServiceImpl implements PropertyOwnerService {
   protected PropertyOwnerRepository ownerRepository;
 
   @Override
-  public PropertyOwnerDto addNewOwner(PropertyOwnerDto ownerDto) {
+  public RestApiResult<PropertyOwnerDto> addNewOwner(PropertyOwnerDto ownerDto) {
     PropertyOwner owner = ownerDto.asPropertyOwner();
     List<PropertyOwner> emails = ownerRepository.findEmails(owner.getEmail(), owner.getId());
     if (!emails.isEmpty()) {
       logger.warn("Email already in use by another property owner");
-      throw new IllegalArgumentException("Email already in use by another property owner");
+      return new RestApiResult<>(null, 404, "Email already in use by another property owner");
     }
     List<PropertyOwner> vats = ownerRepository.findVats(owner.getVat(), owner.getId());
     if (!vats.isEmpty()) {
       logger.warn("User with this Vat already exists");
-      throw new IllegalArgumentException("User with this Vat already exists");
+      return new RestApiResult<>(null, 404, "User with this Vat already exists");
     }
     List<PropertyOwner> usernames = ownerRepository.findUsernames(owner.getUsername(), owner.getId());
     if (!usernames.isEmpty()) {
-      logger.warn("Email already in use by another property owner");
-      throw new IllegalArgumentException("Username already in use by another property owner");
+      logger.warn("Username already in use by another property owner");
+      return new RestApiResult<>(null, 404, "Username already in use by another property owner");
     }
     ownerRepository.create(owner);
     logger.info("Adding new owner: " + ownerDto.toString());
-    return new PropertyOwnerDto(owner);
+    return new RestApiResult<>(ownerDto, 0, "User added succefully");
   }
 
   @Override
