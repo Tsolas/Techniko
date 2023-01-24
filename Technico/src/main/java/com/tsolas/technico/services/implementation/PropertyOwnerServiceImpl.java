@@ -25,28 +25,33 @@ public class PropertyOwnerServiceImpl implements PropertyOwnerService {
     PropertyOwner owner = ownerDto.asPropertyOwner();
     List<PropertyOwner> emails = ownerRepository.findEmails(owner.getEmail(), owner.getId());
     if (!emails.isEmpty()) {
-      logger.warn("Email already in use by another property owner");
-      return new RestApiResult<>(null, 404, "Email already in use by another property owner");
+      logger.warn("Email" + ownerDto.getEmail() + " already in use by another property owner");
+      return new RestApiResult<>(null, 404, "Email" + ownerDto.getEmail() + " already in use by another property owner");
     }
     List<PropertyOwner> vats = ownerRepository.findVats(owner.getVat(), owner.getId());
     if (!vats.isEmpty()) {
-      logger.warn("User with this Vat already exists");
-      return new RestApiResult<>(null, 404, "User with this Vat already exists");
+      logger.warn("User with Vat: " + ownerDto.getVat() + " already exists");
+      return new RestApiResult<>(null, 404, "User with Vat: " + ownerDto.getVat() + " already exists");
     }
     List<PropertyOwner> usernames = ownerRepository.findUsernames(owner.getUsername(), owner.getId());
     if (!usernames.isEmpty()) {
-      logger.warn("Username already in use by another property owner");
-      return new RestApiResult<>(null, 404, "Username already in use by another property owner");
+      logger.warn("Username: " + ownerDto.getUsername() + " already in use by another property owner");
+      return new RestApiResult<>(null, 404, "Username: " + ownerDto.getUsername() + " already in use by another property owner");
     }
     ownerRepository.create(owner);
     logger.info("Adding new owner: " + ownerDto.toString());
-    return new RestApiResult<>(ownerDto, 0, "User added succefully");
+    return new RestApiResult<>(ownerDto, 0, "User :" + ownerDto.toString() + " added succefully");
   }
 
   @Override
   public boolean deletePropertyOwner(int id) {
-    logger.info("Deleting owner with id: " + id);
-    return ownerRepository.delete(id);
+    boolean deleted = ownerRepository.delete(id);
+    if (deleted) {
+      logger.info("Deleting owner with id: " + id);
+    } else {
+      logger.warn("Deletion of owned with id: " + id + "failed");
+    }
+    return deleted;
   }
 
   @Override
