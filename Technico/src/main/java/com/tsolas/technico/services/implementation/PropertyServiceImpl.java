@@ -26,6 +26,7 @@ public class PropertyServiceImpl implements PropertyService {
   @Override
   @Transactional
   public PropertyDto addNewProperty(int ownerId, PropertyDto propertyDto) {
+    logger.trace("Trying to add new property");
     try {
       PropertyType.valueOf(propertyDto.getPropertyType().toString());
     } catch (IllegalArgumentException e) {
@@ -35,8 +36,8 @@ public class PropertyServiceImpl implements PropertyService {
     Property property = propertyDto.asProperty();
     List<Property> e9List = propertyRepository.findE9s(property.getE9(), property.getId());
     if (!e9List.isEmpty()) {
-      logger.warn("A property with this E9 already exists");
-      throw new IllegalArgumentException("A property with this E9 already exists");
+      logger.warn("A property with E9: " + property.getE9() + "already exists");
+      throw new IllegalArgumentException("A property with E9: " + property.getE9() + "already exists");
     }
     PropertyOwner propertyOwner = ownerRepository.read(ownerId);
     property.setOwner(propertyOwner);
@@ -49,14 +50,26 @@ public class PropertyServiceImpl implements PropertyService {
 
   @Override
   public boolean deleteProperty(int id) {
-    logger.info("Deleting property with id: " + id);
-    return propertyRepository.delete(id);
+    boolean deleted = propertyRepository.delete(id);
+    if (deleted) {
+      logger.info("Deleting owner with id: " + id);
+    } else {
+      logger.warn("Deletion of owned with id: " + id + "failed");
+    }
+    return deleted;
   }
 
   @Override
   public PropertyDto getProperty(int id) {
-    logger.info("Returning property with id: " + id);
-    return new PropertyDto(propertyRepository.read(id));
+    logger.trace("Trying to find property with id: " + id);
+    try {
+      PropertyDto property = new PropertyDto(propertyRepository.read(id));
+      logger.info("Returning property: " + property.toString());
+      return property;
+    } catch (NullPointerException e) {
+      logger.error("Error getting owner with id " + id, e);
+      return null;
+    }
   }
 
   @Override
@@ -83,6 +96,7 @@ public class PropertyServiceImpl implements PropertyService {
   public PropertyDto changeAddress(int id, String newAddress) {
     Property property = propertyRepository.read(id);
     if (property == null) {
+      logger.error("Property with id :" + id + "doesn't exist.");
       return null;
     }
     property.setAddress(newAddress);
@@ -95,6 +109,7 @@ public class PropertyServiceImpl implements PropertyService {
   public PropertyDto changeYear(int id, String newYear) {
     Property property = propertyRepository.read(id);
     if (property == null) {
+      logger.error("Property with id :" + id + "doesn't exist.");
       return null;
     }
     property.setYearOfConstruction(newYear);
@@ -107,11 +122,13 @@ public class PropertyServiceImpl implements PropertyService {
   public PropertyDto changePropertyType(int id, PropertyType newPropertyType) {
     Property property = propertyRepository.read(id);
     if (property == null) {
+      logger.error("Property with id :" + id + "doesn't exist.");
       return null;
     }
     try {
       PropertyType.valueOf(newPropertyType.toString());
     } catch (IllegalArgumentException e) {
+      logger.error("Invalid PropertyType value: " + newPropertyType);
       throw new IllegalArgumentException("Invalid PropertyType value: " + newPropertyType);
     }
     property.setPropertyType(newPropertyType);
@@ -124,6 +141,7 @@ public class PropertyServiceImpl implements PropertyService {
   public PropertyDto changeE9(int id, int newE9) {
     Property property = propertyRepository.read(id);
     if (property == null) {
+      logger.error("Property with id :" + id + "doesn't exist.");
       return null;
     }
     List<Property> e9List = propertyRepository.findE9s(property.getE9(), property.getId());

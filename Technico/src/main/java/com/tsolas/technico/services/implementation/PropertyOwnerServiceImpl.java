@@ -63,7 +63,6 @@ public class PropertyOwnerServiceImpl implements PropertyOwnerService {
       logger.error("Error getting owner with id " + id, e);
       return null;
     }
-
   }
 
   @Override
