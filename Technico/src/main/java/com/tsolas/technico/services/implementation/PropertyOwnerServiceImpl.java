@@ -56,19 +56,27 @@ public class PropertyOwnerServiceImpl implements PropertyOwnerService {
 
   @Override
   public PropertyOwnerDto getOwner(int id) {
-    logger.info("Returning owner with id: " + id);
-    return new PropertyOwnerDto(ownerRepository.read(id));
+    logger.trace("Trying to find owner with id: " + id);
+    try {
+      return new PropertyOwnerDto(ownerRepository.read(id));
+    } catch (NullPointerException e) {
+      logger.error("Error getting owner with id " + id, e);
+      return null;
+    }
+
   }
 
   @Override
   public List<PropertyOwnerDto> getAllOwners() {
-    logger.info("Getting all owners");
+    logger.trace("Getting all owners");
     return ownerRepository.readAll().stream().map(PropertyOwnerDto::new).collect(Collectors.toList());
   }
 
   @Override
   public RestApiResult<PropertyOwnerDto> getOwnerByVat(int vat) {
+    logger.trace("Getting owner with Vat :" + vat);
     if (ownerRepository.findbyVat(vat).isEmpty()) {
+      logger.warn("There are no users with Vat: " + vat);
       return new RestApiResult<>(null, 404, "There is no user with this Vat");
     }
     logger.info("Returning owner with vat: " + vat);
@@ -78,7 +86,9 @@ public class PropertyOwnerServiceImpl implements PropertyOwnerService {
 
   @Override
   public RestApiResult<PropertyOwnerDto> getOwnerByEmail(String email) {
+    logger.trace("Getting owner with e-mail :" + email);
     if (ownerRepository.findbyEmail(email).isEmpty()) {
+      logger.warn("There are no users with e-mail: " + email);
       return new RestApiResult<>(null, 404, "There is no user with this e-mail");
     }
     logger.info("Getting owner with e-mail: " + email);
@@ -90,6 +100,7 @@ public class PropertyOwnerServiceImpl implements PropertyOwnerService {
   public PropertyOwnerDto changeAddress(int id, String newAddress) {
     PropertyOwner propertyOwner = ownerRepository.read(id);
     if (propertyOwner == null) {
+      logger.error("Owner with id :" + id + "doesn't exist.");
       return null;
     }
     propertyOwner.setAddress(newAddress);
@@ -102,11 +113,12 @@ public class PropertyOwnerServiceImpl implements PropertyOwnerService {
   public PropertyOwnerDto changeEmail(int id, String email) {
     PropertyOwner propertyOwner = ownerRepository.read(id);
     if (propertyOwner == null) {
+      logger.warn("Owner with id :" + id + "doesn't exist.");
       return null;
     }
     List<PropertyOwner> results = ownerRepository.findEmails(email, id);
     if (!results.isEmpty()) {
-      throw new IllegalArgumentException("Email already in use by another property owner");
+      logger.warn("Owner with email :" + email + "doesn't exist.");
     }
     propertyOwner.setEmail(email);
     logger.info("Changing e-mail of owner with id: " + id + "to :" + email);
@@ -118,6 +130,7 @@ public class PropertyOwnerServiceImpl implements PropertyOwnerService {
   public PropertyOwnerDto changeName(int id, String name) {
     PropertyOwner propertyOwner = ownerRepository.read(id);
     if (propertyOwner == null) {
+      logger.warn("Owner with id :" + id + "doesn't exist.");
       return null;
     }
     propertyOwner.setName(name);
@@ -130,6 +143,7 @@ public class PropertyOwnerServiceImpl implements PropertyOwnerService {
   public PropertyOwnerDto changePassword(int id, String password) {
     PropertyOwner propertyOwner = ownerRepository.read(id);
     if (propertyOwner == null) {
+      logger.warn("Owner with id :" + id + "doesn't exist.");
       return null;
     }
     propertyOwner.setPassword(password);
@@ -142,6 +156,7 @@ public class PropertyOwnerServiceImpl implements PropertyOwnerService {
   public PropertyOwnerDto changePhoneNumber(int id, String phoneNumber) {
     PropertyOwner propertyOwner = ownerRepository.read(id);
     if (propertyOwner == null) {
+      logger.warn("Owner with id :" + id + "doesn't exist.");
       return null;
     }
     propertyOwner.setPhoneNumber(phoneNumber);
@@ -154,6 +169,7 @@ public class PropertyOwnerServiceImpl implements PropertyOwnerService {
   public PropertyOwnerDto changeSurname(int id, String surname) {
     PropertyOwner propertyOwner = ownerRepository.read(id);
     if (propertyOwner == null) {
+      logger.warn("Owner with id :" + id + "doesn't exist.");
       return null;
     }
     propertyOwner.setSurname(surname);
@@ -166,11 +182,12 @@ public class PropertyOwnerServiceImpl implements PropertyOwnerService {
   public PropertyOwnerDto changeUsername(int id, String username) {
     PropertyOwner propertyOwner = ownerRepository.read(id);
     if (propertyOwner == null) {
+      logger.warn("Owner with id :" + id + "doesn't exist.");
       return null;
     }
     List<PropertyOwner> usernames = ownerRepository.findUsernames(propertyOwner.getUsername(), propertyOwner.getId());
     if (!usernames.isEmpty()) {
-      throw new IllegalArgumentException("Username already in use by another property owner");
+      logger.warn("Owner with username :" + username + "doesn't exist.");
     }
     propertyOwner.setUsername(username);
     logger.info("Changing username of owner with id: " + id + "to :" + username);
@@ -182,11 +199,12 @@ public class PropertyOwnerServiceImpl implements PropertyOwnerService {
   public PropertyOwnerDto changeVat(int id, int vat) {
     PropertyOwner propertyOwner = ownerRepository.read(id);
     if (propertyOwner == null) {
+      logger.warn("Owner with id :" + id + "doesn't exist.");
       return null;
     }
     List<PropertyOwner> allvats = ownerRepository.findVats(propertyOwner.getVat(), id);
     if (!allvats.isEmpty()) {
-      throw new IllegalArgumentException("User with this Vat already exists  " + allvats.size());
+      logger.warn("Owner with vat :" + vat + "doesn't exist.");
     }
     propertyOwner.setVat(vat);
     logger.info("Changing vat of owner with id: " + id + "to :" + vat);
