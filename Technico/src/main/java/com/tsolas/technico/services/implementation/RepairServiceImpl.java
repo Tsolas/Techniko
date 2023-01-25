@@ -27,10 +27,11 @@ public class RepairServiceImpl implements RepairService {
   @Override
   @Transactional
   public RepairDto addNewRepair(int propertyId, RepairDto repairDto) {
+    logger.trace("Trying to add a new repair for property with id :" + propertyId);
     try {
       RepairType.valueOf(repairDto.getRepairType().toString());
     } catch (IllegalArgumentException e) {
-      logger.warn("Invalid RepairType value: " + repairDto.getRepairType());
+      logger.error("Invalid RepairType value: " + repairDto.getRepairType());
       throw new IllegalArgumentException("Invalid RepairType value: " + repairDto.getRepairType());
     }
     try {
@@ -51,14 +52,26 @@ public class RepairServiceImpl implements RepairService {
 
   @Override
   public boolean deleteRepair(int id) {
-    logger.info("Deleting repair with id: " + id);
-    return repairRepository.delete(id);
+    boolean deleted = repairRepository.delete(id);
+    if (deleted) {
+      logger.info("Deleting repair with id: " + id);
+    } else {
+      logger.warn("Deletion of repair with id: " + id + "failed");
+    }
+    return deleted;
   }
 
   @Override
   public RepairDto getRepair(int id) {
-    logger.info("Returning repair with id: " + id);
-    return new RepairDto(repairRepository.read(id));
+    logger.trace("Trying to find repair with id: " + id);
+    try {
+      RepairDto repair = new RepairDto(repairRepository.read(id));
+      logger.info("Returning repair: " + repair.toString());
+      return repair;
+    } catch (NullPointerException e) {
+      logger.error("Error getting repair with id " + id, e);
+      return null;
+    }
   }
 
   @Override
@@ -77,6 +90,7 @@ public class RepairServiceImpl implements RepairService {
   public RepairDto changeRepairType(int id, RepairType newRepairType) {
     Repair repair = repairRepository.read(id);
     if (repair == null) {
+      logger.error("Repair with id :" + id + "doesn't exist.");
       return null;
     }
     try {
@@ -95,6 +109,7 @@ public class RepairServiceImpl implements RepairService {
   public RepairDto changeRepairDescription(int id, String newRepairDescription) {
     Repair repair = repairRepository.read(id);
     if (repair == null) {
+      logger.error("Repair with id :" + id + "doesn't exist.");
       return null;
     }
     repair.setRepairDescription(newRepairDescription);
@@ -107,6 +122,7 @@ public class RepairServiceImpl implements RepairService {
   public RepairDto changeSubmissionDate(int id, String newSubmissionDate) {
     Repair repair = repairRepository.read(id);
     if (repair == null) {
+      logger.error("Repair with id :" + id + "doesn't exist.");
       return null;
     }
     repair.setSubmissionDate(newSubmissionDate);
@@ -119,6 +135,7 @@ public class RepairServiceImpl implements RepairService {
   public RepairDto changeWorkDescription(int id, String newWorkDescription) {
     Repair repair = repairRepository.read(id);
     if (repair == null) {
+      logger.error("Repair with id :" + id + "doesn't exist.");
       return null;
     }
     repair.setWorkDescription(newWorkDescription);
@@ -131,6 +148,7 @@ public class RepairServiceImpl implements RepairService {
   public RepairDto changeStartDate(int id, String newStartDate) {
     Repair repair = repairRepository.read(id);
     if (repair == null) {
+      logger.error("Repair with id :" + id + "doesn't exist.");
       return null;
     }
     repair.setStartDate(newStartDate);
@@ -143,6 +161,7 @@ public class RepairServiceImpl implements RepairService {
   public RepairDto changeEndDate(int id, String newEndDate) {
     Repair repair = repairRepository.read(id);
     if (repair == null) {
+      logger.error("Repair with id :" + id + "doesn't exist.");
       return null;
     }
     repair.setEndDate(newEndDate);
@@ -155,6 +174,7 @@ public class RepairServiceImpl implements RepairService {
   public RepairDto changeCost(int id, double newCost) {
     Repair repair = repairRepository.read(id);
     if (repair == null) {
+      logger.error("Repair with id :" + id + "doesn't exist.");
       return null;
     }
     repair.setCost(newCost);
@@ -167,6 +187,7 @@ public class RepairServiceImpl implements RepairService {
   public RepairDto accept(int id) {
     Repair repair = repairRepository.read(id);
     if (repair == null) {
+      logger.error("Repair with id :" + id + "doesn't exist.");
       return null;
     }
     repair.setAcceptance(true);
@@ -179,6 +200,7 @@ public class RepairServiceImpl implements RepairService {
   public RepairDto decline(int id) {
     Repair repair = repairRepository.read(id);
     if (repair == null) {
+      logger.error("Repair with id :" + id + "doesn't exist.");
       return null;
     }
     repair.setAcceptance(false);
@@ -191,6 +213,7 @@ public class RepairServiceImpl implements RepairService {
   public RepairDto changeRepairStatus(int id, RepairStatus newRepairStatus) {
     Repair repair = repairRepository.read(id);
     if (repair == null) {
+      logger.error("Repair with id :" + id + "doesn't exist.");
       return null;
     }
     try {
@@ -209,6 +232,7 @@ public class RepairServiceImpl implements RepairService {
   public RepairDto changeActualStartDate(int id, String newActualStartDate) {
     Repair repair = repairRepository.read(id);
     if (repair == null) {
+      logger.error("Repair with id :" + id + "doesn't exist.");
       return null;
     }
     repair.setActualStartDate(newActualStartDate);
@@ -221,6 +245,7 @@ public class RepairServiceImpl implements RepairService {
   public RepairDto changeActualEndDate(int id, String newActualEndDate) {
     Repair repair = repairRepository.read(id);
     if (repair == null) {
+      logger.error("Repair with id :" + id + "doesn't exist.");
       return null;
     }
     repair.setActualEndDate(newActualEndDate);

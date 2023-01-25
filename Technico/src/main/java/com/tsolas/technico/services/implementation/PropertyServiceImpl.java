@@ -26,7 +26,7 @@ public class PropertyServiceImpl implements PropertyService {
   @Override
   @Transactional
   public PropertyDto addNewProperty(int ownerId, PropertyDto propertyDto) {
-    logger.trace("Trying to add new property");
+    logger.trace("Trying to add new property for owner with id: " + ownerId);
     try {
       PropertyType.valueOf(propertyDto.getPropertyType().toString());
     } catch (IllegalArgumentException e) {
